@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maarten van Donselaar — Portfolio CE jaar 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0D1B2A;
+      --surface:  #132236;
+      --border:   #1E3450;
+      --accent:   #F4841E;
+      --accent2:  #FFB26B;
+      --text:     #E8EDF2;
+      --muted:    #7A95AE;
+      --white:    #FFFFFF;
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── FADE-IN ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13, 27, 42, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 62px; left: 0; right: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 99;
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; padding-bottom: 0; }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      padding: 7rem 2rem 5rem;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    section:first-of-type { padding-top: 8rem; }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 100px;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 9vw, 6.8rem);
+      font-weight: 800;
+      line-height: 0.93;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.2em;
+    }
+
+    .hero-name .accent-line {
+      display: block;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+      margin-bottom: 2.8rem;
+      margin-top: 0.7rem;
+    }
+
+    .hero-intro {
+      max-width: 640px;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── TROTS CARDS ── */
+    .hero-trots {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2.8rem;
+    }
+
+    .trots-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--accent);
+      padding: 1.2rem 1.4rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .trots-card:hover {
+      border-top-color: var(--accent2);
+      background: rgba(19,34,54,0.9);
+    }
+
+    .trots-card strong {
+      display: block;
+      color: var(--accent2);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    /* ── DAS BLOCK ── */
+    .das-block {
+      margin-top: 2.8rem;
+      padding: 2rem 2.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .das-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+    }
+
+    .das-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── SKILLS TABLE ── */
+    .skills-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    thead tr {
+      background: var(--surface);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    thead th {
+      padding: 0.9rem 1.2rem;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    thead th:not(:first-child) { text-align: center; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(19,34,54,0.7); }
+
+    td { padding: 0.85rem 1.2rem; color: var(--text); }
+
+    td:not(:first-child) {
+      text-align: center;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      font-size: 1rem;
+    }
+
+    .score-high { color: var(--accent); }
+    .score-mid  { color: var(--text); }
+    .score-low  { color: var(--muted); }
+
+    .growth-badge {
+      display: inline-block;
+      background: rgba(244,132,30,0.15);
+      color: var(--accent);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 0.15em 0.5em;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+      text-transform: uppercase;
+      border: 1px solid rgba(244,132,30,0.3);
+    }
+
+    /* ── ANALYSE ── */
+    .analyse-block { margin-top: 2.5rem; }
+
+    .analyse-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1rem;
+      transition: border-left-color 0.2s;
+    }
+
+    .analyse-item:hover { border-left-color: var(--accent2); }
+
+    .analyse-item h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .analyse-item p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding-left: 2.4rem;
+      margin-top: 1rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 0.5rem;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--border));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3.2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.65rem;
+      top: 0.45rem;
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .timeline-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .timeline-body {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.78;
+      max-width: 640px;
+    }
+
+    .timeline-tag {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.7rem;
+      padding: 0.22em 0.7em;
+      margin-top: 0.9rem;
+      margin-right: 0.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .timeline-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── EVIDENCE CARDS ── */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .evidence-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--border);
+      padding: 1.6rem;
+      transition: border-top-color 0.2s, background 0.2s;
+    }
+
+    .evidence-card:hover {
+      border-top-color: var(--accent);
+    }
+
+    .evidence-card.wide { grid-column: 1 / -1; }
+
+    .evidence-card .card-cat {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+
+    .evidence-card h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .evidence-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    /* ── NIVEAU 2 ── */
+    .keuze-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .keuze-block .keuze-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.6rem;
+    }
+
+    .goals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .goal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .goal-card:hover { background: rgba(19,34,54,0.9); }
+
+    .goal-card .goal-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: rgba(30,52,80,0.8);
+      line-height: 1;
+      margin-bottom: 0.7rem;
+      user-select: none;
+    }
+
+    .goal-card h3 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .goal-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-trots { grid-template-columns: 1fr; }
+      .goals-grid { grid-template-columns: 1fr; }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .evidence-card.wide { grid-column: auto; }
+      section { padding: 5rem 1.2rem 3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">M<span>.</span>van Donselaar</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#terugblik">Terugblik</a></li>
+      <li><a href="#bewijsstukken">Bewijsstukken</a></li>
+      <li><a href="#niveau2">Niveau 2</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu openen">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home"          onclick="closeMenu()">Home</a>
+    <a href="#skills"        onclick="closeMenu()">Skills</a>
+    <a href="#terugblik"     onclick="closeMenu()">Terugblik</a>
+    <a href="#bewijsstukken" onclick="closeMenu()">Bewijsstukken</a>
+    <a href="#niveau2"       onclick="closeMenu()">Niveau 2</a>
+  </div>
+
+  <!-- ══ HERO ══ -->
+  <section id="home">
+    <p class="hero-eyebrow reveal">Portfolio — Commerciële Economie, jaar 1 · Hogeschool van Amsterdam</p>
+    <h1 class="hero-name reveal reveal-delay-1">
+      Maarten
+      <span class="accent-line">van Donselaar.</span>
+    </h1>
+    <p class="hero-tagline reveal reveal-delay-2">Leider. Commercieel denker. Resultaatgericht.</p>
+
+    <p class="hero-intro reveal reveal-delay-3">
+      Ik neem snel beslissingen en zet ze om in een concreet plan. Anderen sluiten zich daar graag bij aan. Mijn DAS-testresultaten bevestigen wat ik in de praktijk al wist: ik heb een dominant profiel dat mensen in beweging kan brengen. Ik wacht niet af tot iemand anders het voortouw neemt. Ik zie wat er moet gebeuren en pak het op.
+    </p>
+    <p class="hero-intro reveal reveal-delay-3">
+      De commerciële wereld trekt mij oprecht aan. Niet omdat ik het moet, maar omdat ik er energie van krijg. Ik wil begrijpen hoe bedrijven groeien, hoe je mensen overtuigt en hoe je waarde creëert voor klanten. Dat zie ik terug in mijn resultaten. Commercieel bewustzijn is het enige gebied waar ik het hele jaar mezelf met een 8 heb beoordeeld.
+    </p>
+    <p class="hero-intro reveal reveal-delay-3">
+      Dit portfolio is een verslag van mijn eerste jaar CE. Niet alleen de hoogtepunten, maar ook de momenten waarop het wat minder ging: het afwachten in blok 1, de onvoldoende voor het Triple Layered Canvas model, het verslapen voor de sportles. Die momenten zijn net zo belangrijk als de successen, want ze laten precies zien hoe en waarom ik me heb ontwikkeld.
+    </p>
+
+    <p class="section-label reveal" style="margin-top:2.8rem;">Waar ik trots op ben</p>
+
+    <div class="hero-trots">
+      <div class="trots-card reveal reveal-delay-1">
+        <strong>Strakke planning zonder stress</strong>
+        Ik plan zo dat deadlines geen verrassing zijn. In blok 2 hield ik strakke controle op de planning van het eventplan. Het hele team wist van tevoren precies waar we stonden. We verdeelden taken over de week en zorgden dat iedereen wist wat er wanneer klaar moest zijn. Mijn SMARTi-doel uit blok 1 — alles af voor donderdag 23:00 — is een concreet bewijs van dat patroon.
+      </div>
+      <div class="trots-card reveal reveal-delay-2">
+        <strong>Van afwachten naar regie nemen</strong>
+        In blok 1 zat ik te wachten tot iemand mij iets vroeg. In blok 4 offerde ik mijn weekend op om het Triple Layered Canvas model recht te trekken nadat een ziek teamlid zijn deel niet had afgerond. Die keuze kostte mij vrije tijd, maar daardoor hadden we het wel voor de deadline af.
+      </div>
+      <div class="trots-card reveal reveal-delay-3">
+        <strong>Leren van onvoldoendes</strong>
+        De onvoldoende voor het Triple Layered Canvas viel erg tegen. Niet omdat we een onvoldoende haalden, maar omdat ik wist dat het voorkomen had kunnen worden. We kozen voor de korte weg onder tijdsdruk, en dat zag je terug in de kwaliteit. Feedback werkt alleen als je er iets mee doet.
+      </div>
+      <div class="trots-card reveal reveal-delay-4">
+        <strong>Commercieel bewustzijn als echte kracht</strong>
+        Sales, marktanalyse, klantrelaties: de onderwerpen die we behandelen vind ik oprecht interessant. Als ik het vergelijk met de middelbare school, waar het vooral moeten was, zie ik dat als een wereld van verschil. De dingen die we behandelen vind ik leuk om te leren en ik denk dat het me ook echt helpt.
+      </div>
+    </div>
+
+    <div class="das-block reveal">
+      <div class="das-title">DAS-profiel en Belbin-rol</div>
+      <p style="font-size:0.95rem;color:var(--text);line-height:1.85;margin-bottom:0.9rem;">Mijn DAS-testresultaat laat een dominant profiel zien. Ik neem snel beslissingen, denk resultaatgericht en ben niet bang om de leiding te pakken als dat nodig is. Mijn Belbin-rol sluit daar direct op aan: ik ben van nature een groepsleider die structuur aanbrengt en anderen in beweging zet. Dat merkte ik duidelijk in blok 2, toen ik vanzelf de regie pakte over het Eventplan en de montage van de Aftermovie.</p>
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.85;">Maar een dominant profiel heeft ook een keerzijde. Als teamleden geen inzet tonen of slecht communiceren, irriteer ik me snel en haak ik soms af in plaats van bijsturen. Dat patroon herken ik en het is precies wat ik in niveau 2 wil doorbreken: niet afhaken als het tegenzit, maar direct aanspreken.</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ SKILLS ══ -->
+  <section id="skills">
+    <span class="section-label reveal">CE-Skills</span>
+    <h2 class="reveal" style="font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--white);margin-bottom:0.4rem;line-height:1.1;">Mijn groei in cijfers.</h2>
+    <p class="reveal" style="color:var(--muted);font-size:0.93rem;margin-bottom:2rem;max-width:640px;line-height:1.75;">Drie meetpunten over het jaar: de 0-meting aan het begin, einde semester 1 en einde semester 2. De scores zijn zelfreflecties, geen beoordelingen van docenten. Dat maakt ze extra eerlijk: ik heb ze ingevuld op basis van wat ik werkelijk merkte in mijn eigen gedrag.</p>
+
+    <div class="skills-table-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>CE-skill</th>
+            <th>0-meting</th>
+            <th>Semester 1</th>
+            <th>Semester 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Kritisch denken</td><td class="score-mid">6</td><td class="score-mid">7</td><td class="score-mid">6</td></tr>
+          <tr><td>Creativiteit</td><td class="score-mid">7</td><td class="score-mid">7</td><td class="score-mid">7</td></tr>
+          <tr><td>Nieuwsgierigheid</td><td class="score-mid">7</td><td class="score-mid">7</td><td class="score-mid">7</td></tr>
+          <tr><td>Communiceren</td><td class="score-mid">6</td><td class="score-mid">6</td><td class="score-mid">7</td></tr>
+          <tr><td>Samenwerken</td><td class="score-mid">6</td><td class="score-high">8</td><td class="score-mid">7</td></tr>
+          <tr><td>Leiderschap</td><td class="score-mid">7</td><td class="score-mid">7</td><td class="score-high">8</td></tr>
+          <tr><td>Initiatief</td><td class="score-mid">7</td><td class="score-mid">7</td><td class="score-mid">6</td></tr>
+          <tr><td>Commercieel bewustzijn</td><td class="score-high">8</td><td class="score-high">8</td><td class="score-high">8</td></tr>
+          <tr><td>Doorzettingsvermogen</td><td class="score-mid">7</td><td class="score-mid">7</td><td class="score-high">8</td></tr>
+          <tr><td>Aanpassingsvermogen</td><td class="score-mid">7</td><td class="score-mid">7</td><td class="score-high">8</td></tr>
+          <tr><td>Zelfsturing <span class="growth-badge">+2</span></td><td class="score-low">5</td><td class="score-mid">6</td><td class="score-mid">7</td></tr>
+          <tr><td>Verantwoordelijkheidsbesef</td><td class="score-mid">6</td><td class="score-mid">7</td><td class="score-mid">7</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="analyse-block">
+      <div class="analyse-item reveal">
+        <h4>Grootste groei: Zelfsturing (5 → 6 → 7)</h4>
+        <p>Dit is de skill waar ik het meest trots op ben, omdat de groei het meest tijd heeft gekost. In blok 1 gaf ik mezelf een 5. Niet omdat ik lui was, maar omdat ik eerlijk moest zijn: ik wachtte af. Het eerste SMARTi-doel dat ik opstelde — alles af voor donderdag 23:00 — was een reactie op dat gedrag.</p>
+        <p style="margin-top:0.7rem;">In blok 2 begon het te verschuiven. Ik stelde elke eerste dinsdag mijn sprint-planning op en werkte mijn taken af voordat de sprint eindigde. In blok 4 koos ik ervoor om het in het weekend zelf door te werken. Dat was geen verplichting, maar zelfsturing. Een 7 voelt eerlijk voor waar ik nu sta, en ik weet precies wat er nodig is om naar een 8 te groeien.</p>
+      </div>
+
+      <div class="analyse-item reveal">
+        <h4>Stabiel sterk: Commercieel bewustzijn (8 → 8 → 8)</h4>
+        <p>De enige skill waar ik het hele jaar een 8 heb gescoord. Dat is geen toeval, want ik ben echt geïnteresseerd in hoe bedrijven werken, hoe markten zich gedragen en hoe je als ondernemer waarde creëert voor klanten.</p>
+        <p style="margin-top:0.7rem;">In blok 1 merkte ik dat al bij het interview voor Nationale-Nederlanden. Ik bedacht vijf uitgewerkte topics — van salesstrategieën tot digitalisering en de toekomst van de sector — en stelde vragen die verder gingen dan de basis.</p>
+      </div>
+
+      <div class="analyse-item reveal">
+        <h4>Stijging aan het einde: Leiderschap (7 → 7 → 8)</h4>
+        <p>In blok 2 pakte ik voor het eerst actief de leiding: ik monteerde de Aftermovie zelf, hield de planning bij en zorgde dat het team wist wat er van hen verwacht werd. In blok 3 was er een nieuwe test: de samenwerking met een ander duo liep vast door hun afwezigheid. Samen met Maurits meldde ik het direct bij de docenten en regelde de overstap naar een nieuw team.</p>
+        <p style="margin-top:0.7rem;">Leiderschap is voor mij niet het hardste roepen, maar weten wanneer jij de stap moet zetten en die dan ook daadwerkelijk zetten.</p>
+      </div>
+
+      <div class="analyse-item reveal">
+        <h4>Schommeling: Samenwerken (6 → 8 → 7)</h4>
+        <p>De stijging naar een 8 in semester 1 komt door blok 2. Ik werkte goed samen, communiceerde helder over de planning en stelde twee vaste afstemmomenten per sprint in. In blok 3 en 4 had ik meer moeite met de groepsdynamiek. Als teamleden afspraken niet nakwamen, reageerde ik met irritatie in plaats van met een directe aanpak. Dat is een patroon dat ik herken en actief ga doorbreken.</p>
+      </div>
+
+      <div class="analyse-item reveal">
+        <h4>Terugval: Initiatief (7 → 7 → 6) en Kritisch denken (6 → 7 → 6)</h4>
+        <p>Beide skills zakten in semester 2 terug naar hun beginpunt. Voor initiatief geldt: als de groepsdynamiek niet goed voelt, neem ik minder initiatief. Ik trek me terug op mijn eigen taken. Dat is een keuze die ik maak zonder er goed bij na te denken.</p>
+        <p style="margin-top:0.7rem;">Voor kritisch denken is de terugval te verklaren door de manier waarop we in de laatste sprints werkten. We kozen soms te snel voor de kortste route. Dat is ook een gezamenlijke fout, maar ik had er individueel aan bij kunnen sturen.</p>
+      </div>
+
+      <div class="analyse-item reveal">
+        <h4>Solide groei: Doorzettingsvermogen en Aanpassingsvermogen (7 → 7 → 8)</h4>
+        <p>Doorzettingsvermogen bewees ik door het weekend op te offeren voor het Triple Layered Canvas en door na de onvoldoendes in blok 4 niet te verslappen maar juist aan te trekken.</p>
+        <p style="margin-top:0.7rem;">Aanpassingsvermogen groeide door blok 3. De samenwerking met het afwezige duo liep vast. In plaats van gefrustreerd te blijven zitten, meldde ik het direct bij de docenten en suggereerde: een nieuw team.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ TERUGBLIK ══ -->
+  <section id="terugblik">
+    <span class="section-label reveal">Chronologische terugblik</span>
+    <h2 class="reveal" style="font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--white);margin-bottom:0.4rem;line-height:1.1;">Van blok 1 tot blok 4.</h2>
+    <p class="reveal" style="color:var(--muted);font-size:0.93rem;margin-bottom:3rem;max-width:540px;">Wat heb ik gedaan, wat ging er mis en wat heb ik ervan geleerd.</p>
+
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <div class="timeline-label">Blok 1</div>
+        <div class="timeline-title">Business Development</div>
+        <div class="timeline-body">Ik was afwachtend. Ik zag wat er speelde in het team maar nam geen initiatief. Het belangrijkste inzicht: teamleden zijn afhankelijk van elkaar, en zonder goede communicatie blokkeert iedereen. We losten dat op via WhatsApp — simpel maar effectief. Mijn commercieel bewustzijn scoorde al een 8.</div>
+        <span class="timeline-tag">Afwachtend</span>
+        <span class="timeline-tag">Communicatie</span>
+        <span class="timeline-tag">Commercieel bewustzijn</span>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-label">Blok 2</div>
+        <div class="timeline-title">Realiseren</div>
+        <div class="timeline-body">Hier nam ik voor het eerst de leiding. Ik monteerde de Aftermovie zelf en hield strakke controle op de planning van het Eventplan. Dat leverde iets op wat ik in blok 1 miste: rust vlak voor de deadline. Het team wist waar het aan toe was.</div>
+        <span class="timeline-tag">Leiderschap</span>
+        <span class="timeline-tag">Planning</span>
+        <span class="timeline-tag">Aftermovie</span>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-label">Blok 3</div>
+        <div class="timeline-title">Koers bepalen</div>
+        <div class="timeline-body">De samenwerking met een ander duo liep vast door hun afwezigheid. Ik meldde het direct bij de docenten — de juiste keuze. We stapten over naar een productief nieuw team. Ik pakte de structuur van de slidedeck voor het adviesrapport op, want overzicht aanbrengen gaat mij makkelijk af.</div>
+        <span class="timeline-tag">Aanpassingsvermogen</span>
+        <span class="timeline-tag">Communicatie</span>
+        <span class="timeline-tag">Adviesrapport</span>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-label">Blok 4</div>
+        <div class="timeline-title">Waarde creëren</div>
+        <div class="timeline-body">De Trendanalyse raakte mijn commercieel bewustzijn. Tegelijk maakten we een fout bij het Triple Layered Canvas door slechte samenwerking en te weinig kritisch kijken naar elkaars stuk. Ik offerde mijn weekend op om dat recht te trekken — dat was zelfsturing in de praktijk. De onvoldoendes in sprint 2 werkten als wake-up call.</div>
+        <span class="timeline-tag">Zelfsturing</span>
+        <span class="timeline-tag">Trendanalyse</span>
+        <span class="timeline-tag">Podcast</span>
+        <span class="timeline-tag">Wake-up call</span>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ BEWIJSSTUKKEN ══ -->
+  <section id="bewijsstukken">
+    <span class="section-label reveal">Bewijsstukken</span>
+    <h2 class="reveal" style="font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--white);margin-bottom:0.4rem;line-height:1.1;">Wat ik heb gemaakt.</h2>
+    <p class="reveal" style="color:var(--muted);font-size:0.93rem;margin-bottom:2.2rem;max-width:540px;">Een paar voorbeelden van opdrachten van dit jaar.</p>
+
+    <div class="evidence-grid">
+
+      <div class="evidence-card wide reveal">
+        <div class="card-cat">Business Development</div>
+        <h3>Samenwerkingscontract + Interviewplan</h3>
+        <p>Ik werkte in een team met Armin, Suze en Precious. We stelden een samenwerkingscontract op met concrete afspraken over aanwezigheid, taakverdeling en kwaliteitsbeheer. Ik was documentbeheerder samen met Armin. Voor m'n interview met Nationale-Nederlanden stelde ik vijf topics op rondom de rol van sales, verkoopstrategieën, klantrelaties, vaardigheden en trends. De respondent was Ernst van Donselaar, een professional met ruime saleservaring in de financiële sector (en ook m'n vader).</p>
+      </div>
+
+      <div class="evidence-card reveal">
+        <div class="card-cat">Growth Mindset</div>
+        <h3>Zelfreflectie op testresultaat</h3>
+        <p>Mijn uitslag toonde een growth mindset met ook een aandeel fixed mindset (circa 26%). Ik geloof dat talent ontwikkelbaar is, maar erken dat aanleg een rol speelt. Ik zie uitdagingen als kansen en focus op het proces, niet alleen op het resultaat.</p>
+      </div>
+
+      <div class="evidence-card reveal">
+        <div class="card-cat">SMARTi doel</div>
+        <h3>Planning: werk af vóór donderdag 23:00</h3>
+        <p>Mijn eerste SMARTi-doel richtte zich op zelfsturing: huiswerk en opdrachten elke week afgerond voor donderdag 23:00. Meetbaar via Brightspace, realistisch omdat woensdag vrij is. Dit gaf me vrijdagen en weekenden zonder achterstallig werk.</p>
+      </div>
+
+      <div class="evidence-card reveal">
+        <div class="card-cat">SMARTi doelen</div>
+        <h3>Creativiteit, Zelfsturing en Samenwerken</h3>
+        <p>Drie doelen per sprint: één onderdeel van het eventplan uitwerken (creativiteit), elke eerste dinsdag mijn planning klaarzetten (zelfsturing), en twee korte afstemmomenten per sprint met het team (samenwerken). Samen gericht op een strakker en efficiënter teamproces.</p>
+      </div>
+
+      <div class="evidence-card wide reveal">
+        <div class="card-cat">Sport reflectie</div>
+        <h3>Leiderschap en kritisch denken in de sportles</h3>
+        <p>Samen met Thijn, Waleed, Tobias en Armin gaf ik een sportles. Halverwege bleek dat de tijdplanning tekortschoot. We stuurden direct bij door spellen met dikke matten toe te voegen. Dit was een directe oefening in leiderschap en kritisch denken: plan loslaten, beschikbare middelen benutten en de situatie redden. Ik heb me één keer verslapen in dit blok; achteraf een duidelijke les in verantwoordelijkheidsbesef.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ NIVEAU 2 ══ -->
+  <section id="niveau2">
+    <span class="section-label reveal">Blik vooruit</span>
+    <h2 class="reveal" style="font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--white);margin-bottom:0.4rem;line-height:1.1;">Niveau 2: keuzes en doelen.</h2>
+    <p class="reveal" style="color:var(--muted);font-size:0.93rem;margin-bottom:2rem;max-width:540px;">Wat ga ik doen, en hoe maak ik dat meetbaar.</p>
+
+    <div class="keuze-block reveal">
+      <span class="keuze-label">Mijn keuze</span>
+      Ik kies voor een leerpad die mijn commercieel bewustzijn en leiderschap verder uitdagen. Dat is niet toevallig, want het zijn de gebieden waar ik het sterkst ben en tegelijk de meeste ruimte zie voor verdieping.
+    </div>
+
+    <div class="goals-grid">
+      <div class="goal-card reveal reveal-delay-1">
+        <div class="goal-num">01</div>
+        <h3>Communicatie en samenwerking</h3>
+        <p>Ik spreek teamleden in het komende jaar direct en binnen 24 uur aan op hun verantwoordelijkheden als afspraken niet worden nagekomen. Zo voorkom ik dat irritatie zich opbouwt en het groepsresultaat eronder lijdt.</p>
+      </div>
+      <div class="goal-card reveal reveal-delay-2">
+        <div class="goal-num">02</div>
+        <h3>Zelfsturing en kwaliteit</h3>
+        <p>Ik plan bij elke challenge in niveau 2 minimaal twee tussentijdse feedbackmomenten in met docenten of teamleden. Zo voorkom ik dat tijdsdruk leidt tot slordigheidsfouten of halve oplossingen. De onvoldoende in blok 4 is de herinnering die ik nodig heb.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Maarten van Donselaar &nbsp;·&nbsp; Commerciële Economie niveau 1 &nbsp;·&nbsp; <span>2024/2025</span></p>
+  </footer>
+
+  <script>
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('mobileMenu');
+      const hamburger = document.querySelector('.hamburger');
+      if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
